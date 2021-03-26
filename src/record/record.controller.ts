@@ -1,4 +1,14 @@
-import { Controller, Res, HttpStatus, Post, Body, Get } from '@nestjs/common';
+import {
+  Controller,
+  Res,
+  HttpStatus,
+  Post,
+  Body,
+  Get,
+  Param,
+  Delete,
+} from '@nestjs/common';
+
 import { RecordService } from './record.service';
 import { Record } from './interface/record.interface';
 import { AddRecordDto } from './dto/record.dto';
@@ -26,6 +36,22 @@ export class RecordController {
       status: 200,
       message: 'success',
       data: records,
+    });
+  }
+
+  // API for deleting a todo by its Id
+  @Delete(':id')
+  async deleteRecordById(@Res() res, @Param() params) {
+    const record: Record = await this.recordService.deleteRecordById(params.id);
+    if (!record) {
+      return res
+        .status(HttpStatus.NOT_FOUND)
+        .json({ status: 404, error: 'Not found!' });
+    }
+
+    return res.status(HttpStatus.OK).json({
+      status: 200,
+      message: 'success!',
     });
   }
 }
