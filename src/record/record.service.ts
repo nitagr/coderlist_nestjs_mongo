@@ -14,4 +14,9 @@ export class RecordService {
     const record: Record = await new this.recordModel(addRecordDto);
     return record.save();
   }
+
+  async getAllRecords(): Promise<Record[]> {
+    const allRecords: Record[] = await this.recordModel.find();
+    return allRecords;
+  }
 }
