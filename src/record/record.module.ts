@@ -1,4 +1,7 @@
 import { Module } from '@nestjs/common';
+import { RecordService } from './record.service';
 
-@Module({})
+@Module({
+  providers: [RecordService]
+})
 export class RecordModule {}
