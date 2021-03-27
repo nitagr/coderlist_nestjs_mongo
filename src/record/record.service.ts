@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { Record } from './interface/record.interface';
-import { AddRecordDto } from './dto/record.dto';
+import { AddRecordDto, UpdateRecordDto } from './dto/record.dto';
 
 @Injectable()
 export class RecordService {
@@ -31,11 +31,11 @@ export class RecordService {
   // service for updating a user record
   async updateRecordById(
     id: string,
-    addRecordDto: AddRecordDto,
+    updateRecordDto: UpdateRecordDto,
   ): Promise<Record> {
     const record: Record = await this.recordModel.findByIdAndUpdate(
       id,
-      addRecordDto,
+      updateRecordDto,
     );
     return record;
   }

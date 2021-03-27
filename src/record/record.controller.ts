@@ -12,7 +12,7 @@ import {
 
 import { RecordService } from './record.service';
 import { Record } from './interface/record.interface';
-import { AddRecordDto } from './dto/record.dto';
+import { AddRecordDto, FindOneParams, UpdateRecordDto } from './dto/record.dto';
 
 @Controller('record')
 export class RecordController {
@@ -42,7 +42,7 @@ export class RecordController {
 
   // API for deleting a todo by its Id
   @Delete(':id')
-  async deleteRecordById(@Res() res, @Param() params) {
+  async deleteRecordById(@Res() res, @Param() params: FindOneParams) {
     const record: Record = await this.recordService.deleteRecordById(params.id);
     if (!record) {
       return res
@@ -60,12 +60,12 @@ export class RecordController {
   @Put(':id')
   async updateRecordById(
     @Res() res,
-    @Body() addRecordDto: AddRecordDto,
-    @Param() params,
+    @Body() updateRecordDto: UpdateRecordDto,
+    @Param() params: FindOneParams,
   ) {
     const record: Record = await this.recordService.updateRecordById(
       params.id,
-      addRecordDto,
+      updateRecordDto,
     );
     if (!record) {
       return res
@@ -76,6 +76,7 @@ export class RecordController {
     return res.status(HttpStatus.OK).json({
       status: 200,
       message: 'success!',
+      data: record,
     });
   }
 }
