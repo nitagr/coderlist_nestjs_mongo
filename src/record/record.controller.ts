@@ -3,6 +3,7 @@ import {
   Res,
   HttpStatus,
   Post,
+  Put,
   Body,
   Get,
   Param,
@@ -43,6 +44,29 @@ export class RecordController {
   @Delete(':id')
   async deleteRecordById(@Res() res, @Param() params) {
     const record: Record = await this.recordService.deleteRecordById(params.id);
+    if (!record) {
+      return res
+        .status(HttpStatus.NOT_FOUND)
+        .json({ status: 404, error: 'Not found!' });
+    }
+
+    return res.status(HttpStatus.OK).json({
+      status: 200,
+      message: 'success!',
+    });
+  }
+
+  // API for updating record by its Id
+  @Put(':id')
+  async updateRecordById(
+    @Res() res,
+    @Body() addRecordDto: AddRecordDto,
+    @Param() params,
+  ) {
+    const record: Record = await this.recordService.updateRecordById(
+      params.id,
+      addRecordDto,
+    );
     if (!record) {
       return res
         .status(HttpStatus.NOT_FOUND)

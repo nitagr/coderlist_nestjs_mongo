@@ -23,8 +23,20 @@ export class RecordService {
   }
 
   // service for deleting a record by its ID
-  async deleteRecordById(id: string): Promise<any> {
+  async deleteRecordById(id: string): Promise<Record> {
     const record: Record = await this.recordModel.findByIdAndRemove(id);
+    return record;
+  }
+
+  // service for updating a user record
+  async updateRecordById(
+    id: string,
+    addRecordDto: AddRecordDto,
+  ): Promise<Record> {
+    const record: Record = await this.recordModel.findByIdAndUpdate(
+      id,
+      addRecordDto,
+    );
     return record;
   }
 }
