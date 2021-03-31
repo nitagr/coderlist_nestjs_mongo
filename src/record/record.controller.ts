@@ -19,6 +19,10 @@ import { AddRecordDto, FindOneParams, UpdateRecordDto } from './dto/record.dto';
 import * as dotenv from 'dotenv';
 import { diskStorage } from 'multer';
 import { Express } from 'express';
+import {
+  customFileName,
+  profileTypeFilter,
+} from './utils/profile-upload.utils';
 
 dotenv.config();
 
@@ -32,7 +36,9 @@ export class RecordController {
     FileInterceptor('image', {
       storage: diskStorage({
         destination: './images',
+        filename: customFileName,
       }),
+      fileFilter: profileTypeFilter,
     }),
   )
   async addRecord(
@@ -82,7 +88,9 @@ export class RecordController {
     FileInterceptor('image', {
       storage: diskStorage({
         destination: './images',
+        filename: customFileName,
       }),
+      fileFilter: profileTypeFilter,
     }),
   )
   async updateRecordById(
