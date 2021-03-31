@@ -8,11 +8,19 @@ import {
   Get,
   Param,
   Delete,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 
+import { FileInterceptor } from '@nestjs/platform-express';
 import { RecordService } from './record.service';
 import { Record } from './interface/record.interface';
 import { AddRecordDto, FindOneParams, UpdateRecordDto } from './dto/record.dto';
+import * as dotenv from 'dotenv';
+import { diskStorage } from 'multer';
+import { Express } from 'express';
+
+dotenv.config();
 
 @Controller('record')
 export class RecordController {
@@ -20,7 +28,19 @@ export class RecordController {
 
   // API for adding a record of user
   @Post()
-  async addRecord(@Res() res, @Body() addRecordDto: AddRecordDto) {
+  @UseInterceptors(
+    FileInterceptor('image', {
+      storage: diskStorage({
+        destination: './images',
+      }),
+    }),
+  )
+  async addRecord(
+    @Res() res,
+    @Body() addRecordDto: AddRecordDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    addRecordDto.profile = file.originalname;
     const record: Record = await this.recordService.addRecord(addRecordDto);
     return res.status(HttpStatus.CREATED).json({
       status: 201,
@@ -58,11 +78,20 @@ export class RecordController {
 
   // API for updating record by its Id
   @Put(':id')
+  @UseInterceptors(
+    FileInterceptor('image', {
+      storage: diskStorage({
+        destination: './images',
+      }),
+    }),
+  )
   async updateRecordById(
     @Res() res,
     @Body() updateRecordDto: UpdateRecordDto,
+    @UploadedFile() file: Express.Multer.File,
     @Param() params: FindOneParams,
   ) {
+    updateRecordDto.profile = file.originalname;
     const record: Record = await this.recordService.updateRecordById(
       params.id,
       updateRecordDto,
@@ -76,7 +105,6 @@ export class RecordController {
     return res.status(HttpStatus.OK).json({
       status: 200,
       message: 'success!',
-      data: record,
     });
   }
 }

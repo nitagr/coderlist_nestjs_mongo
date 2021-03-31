@@ -18,7 +18,6 @@ export class AddRecordDto {
   @IsNotEmpty()
   technologies: string;
 
-  @IsNotEmpty()
   profile: string;
 }
 
