@@ -115,4 +115,10 @@ export class RecordController {
       message: 'success!',
     });
   }
+
+  // API for retrieving images using profile image name
+  @Get('getfile/:filename')
+  getProfileImage(@Param('filename') image, @Res() res) {
+    return res.sendFile(image, { root: './images' });
+  }
 }
