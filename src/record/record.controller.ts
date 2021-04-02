@@ -29,21 +29,7 @@ export class RecordController {
 
   // API for adding a record of user
   @Post()
-  @UseInterceptors(
-    FileInterceptor('image', {
-      storage: diskStorage({
-        destination: './images',
-        filename: imageFileName,
-      }),
-      fileFilter: profileTypeFilter,
-    }),
-  )
-  async addRecord(
-    @Res() res,
-    @Body() addRecordDto: AddRecordDto,
-    @UploadedFile() file: Express.Multer.File,
-  ) {
-    addRecordDto.profile = file.originalname;
+  async addRecord(@Res() res, @Body() addRecordDto: AddRecordDto) {
     const record: Record = await this.recordService.addRecord(addRecordDto);
     return res.status(HttpStatus.CREATED).json({
       status: 201,
@@ -117,5 +103,24 @@ export class RecordController {
   @Get('getfile/:filename')
   getProfileImage(@Param('filename') image, @Res() res) {
     return res.sendFile(image, { root: './images' });
+  }
+
+  // API for user Profile Upload
+  @Post('profile-upload')
+  @UseInterceptors(
+    FileInterceptor('image', {
+      storage: diskStorage({
+        destination: './images',
+        filename: imageFileName,
+      }),
+      fileFilter: profileTypeFilter,
+    }),
+  )
+  async addProfileImage(@Res() res, @UploadedFile() file: Express.Multer.File) {
+    return res.status(HttpStatus.CREATED).json({
+      status: 201,
+      message: 'success',
+      data: file.originalname,
+    });
   }
 }
