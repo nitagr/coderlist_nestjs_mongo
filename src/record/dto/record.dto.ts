@@ -12,12 +12,13 @@ export class AddRecordDto {
   email: string;
 
   @IsNotEmpty()
-  @Length(10, 13)
+  @Length(13)
   mobile: string;
 
   @IsNotEmpty()
   technologies: string;
 
+  @IsNotEmpty()
   profile: string;
 }
 
