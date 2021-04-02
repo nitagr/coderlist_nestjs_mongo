@@ -67,22 +67,11 @@ export class RecordController {
 
   // API for updating record by its Id
   @Put(':id')
-  @UseInterceptors(
-    FileInterceptor('image', {
-      storage: diskStorage({
-        destination: './images',
-        filename: imageFileName,
-      }),
-      fileFilter: profileTypeFilter,
-    }),
-  )
   async updateRecordById(
     @Res() res,
     @Body() updateRecordDto: UpdateRecordDto,
-    @UploadedFile() file: Express.Multer.File,
     @Param() params: FindOneParams,
   ) {
-    updateRecordDto.profile = file.originalname;
     const record: Record = await this.recordService.updateRecordById(
       params.id,
       updateRecordDto,
