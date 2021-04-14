@@ -11,11 +11,13 @@ describe('RecordService', () => {
   const recordDto: AddRecordDto = {
     name: 'Nitish',
     gender: 'male',
-    email: 'service2@eazydiner.com',
+    email: 'service5@eazydiner.com',
     mobile: '+911233123121',
     technologies: '| C++ | Javascript | ',
     profile: 'pic5.jpeg',
   };
+
+  const idForRecordDeletion = '60772dec2d5889332cc8cc59';
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -67,5 +69,10 @@ describe('RecordService', () => {
   it('should list Users', async () => {
     const users = await service.getAllRecords();
     expect(users.length).toBe(7); // because some records were already in DB
+  });
+
+  it('should delete a Record with its ID', async () => {
+    const res = await service.deleteRecordById(idForRecordDeletion);
+    expect(res).not.toBe(null);
   });
 });
