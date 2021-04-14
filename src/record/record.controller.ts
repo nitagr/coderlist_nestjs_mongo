@@ -112,4 +112,21 @@ export class RecordController {
       data: file.originalname,
     });
   }
+
+  //API for retrieving record by id
+  @Get(':id')
+  async findRecordById(@Res() res, @Param() params: FindOneParams) {
+    const record: Record = await this.recordService.findRecordById(params.id);
+    if (!record) {
+      return res
+        .status(HttpStatus.NOT_FOUND)
+        .json({ status: 404, error: 'Not found!' });
+    }
+
+    return res.status(HttpStatus.OK).json({
+      status: 200,
+      message: 'success!',
+      data: record,
+    });
+  }
 }

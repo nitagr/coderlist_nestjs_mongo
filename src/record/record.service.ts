@@ -39,4 +39,10 @@ export class RecordService {
     );
     return record;
   }
+
+  // service for deleting a record by its ID
+  async findRecordById(id: string): Promise<Record> {
+    const record: Record = await this.recordModel.findById(id);
+    return record;
+  }
 }
